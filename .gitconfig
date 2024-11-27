@@ -1,3 +1,6 @@
+[user]
+	name = Wei-Jer Chang
+	email = weijer_chang@berkeley.edu
 [alias]
 
 	# View abbreviated SHA, description, and history graph of the latest 20 commits.
@@ -65,6 +68,8 @@
 
 	# Show the user email for the current repository.
 	whoami = config user.email
+
+	graph = "log --all --graph --decorate --oneline"
 
 [apply]
 
@@ -182,6 +187,6 @@
 
 	defaultBranch = main
 
-[include]
-    # Use separate file for GitHub credentials and email
-    path = ~/.extras
+# [include]
+#     # Use separate file for GitHub credentials and email
+#     path = ~/.extras

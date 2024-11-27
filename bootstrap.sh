@@ -2,6 +2,17 @@
 
 cd "$(dirname "${(%):-%x}")";
 
+# Install zsh if not present
+if ! command -v zsh &> /dev/null; then
+    if command -v apt &> /dev/null; then
+        sudo apt install -y zsh
+    elif command -v brew &> /dev/null; then
+        brew install zsh
+    elif command -v dnf &> /dev/null; then
+        sudo dnf install -y zsh
+    fi
+fi
+
 git pull origin main;
 
 function doIt() {

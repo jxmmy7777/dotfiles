@@ -1,27 +1,48 @@
+# Enable Powerlevel10k instant prompt
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # >>> Homebrew Environment Setup >>>
-eval "$(/opt/homebrew/bin/brew shellenv)"
 if type brew &>/dev/null; then
+    eval "$(brew shellenv)"
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-    autoload -Uz compinit
-    compinit
 fi
 # <<< Homebrew Environment Setup <<<
 
-# >>> Prompt Configuration >>>
-# Using the more feature-rich PROMPT instead of PS1
-PROMPT='%F{cyan}%n%f@%F{yellow}%m%f:%F{green}%~%f$ '
-# <<< Prompt Configuration <<<
+# >>> Oh My Zsh Configuration >>>
+export ZSH="$HOME/.oh-my-zsh"
+ZSH_THEME="powerlevel10k/powerlevel10k"
 
-# >>> PATH Configuration >>>
-# Add `~/bin` and TeX binaries to the `$PATH`
-export PATH="$HOME/bin:/Library/TeX/texbin:$PATH"
+#check if zsh-autosuggestions and zsh-syntax-highlighting are installed
+# Install oh-my-zsh if not present
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+fi
 
-# Load additional config files if they exist
-for file in ~/.{path,exports,aliases,functions,extra}; do
-    [ -r "$file" ] && [ -f "$file" ] && source "$file"
-done
-unset file
-# <<< PATH Configuration <<<
+# Install common plugins
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Install zsh-autosuggestions
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-autosuggestions" ]; then
+    echo "Installing zsh-autosuggestions..."
+    git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions || echo "Failed to install zsh-autosuggestions"
+fi
+
+# Install zsh-syntax-highlighting
+if [ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]; then
+    echo "Installing zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting || echo "Failed to install zsh-syntax-highlighting"
+fi
+
+# Oh My Zsh Plugins
+plugins=(
+    git
+    web-search
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
+# <<< Oh My Zsh Configuration <<<
 
 # >>> History Configuration >>>
 HISTFILE=~/.zsh_history
@@ -31,22 +52,19 @@ setopt APPEND_HISTORY
 setopt SHARE_HISTORY     
 setopt HIST_IGNORE_DUPS  
 setopt HIST_VERIFY       
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
 # <<< History Configuration <<<
 
 # >>> Directory and Shell Options >>>
-# Directory navigation
 setopt AUTO_CD          
 setopt CORRECT         
 setopt CORRECT_ALL     
-
-# Globbing and pattern matching
 setopt NO_CASE_GLOB     
 setopt GLOBSTAR         
-
-# Additional shell options
-setopt AUTO_PUSHD           # Push directories to the stack
-setopt PUSHD_IGNORE_DUPS    # Don't push duplicate directories
-setopt PUSHD_SILENT         # Don't print directory stack
+setopt AUTO_PUSHD       
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT     
 # <<< Directory and Shell Options <<<
 
 # >>> Completion System Configuration >>>
@@ -78,7 +96,25 @@ compdef '_values "NSGlobalDomain options" "NSGlobalDomain"' defaults
 compdef '_values "Common Applications" "Contacts Calendar Dock Finder Mail Safari iTunes SystemUIServer Terminal Twitter"' killall
 # <<< Completion System Configuration <<<
 
-# >>> Conda Initialization >>>
+# >>> PATH Configuration >>>
+export PATH="$HOME/bin:/Library/TeX/texbin:$PATH"
+
+# Load additional config files
+for file in ~/.{path,exports,aliases,functions,extra}; do
+    [ -r "$file" ] && [ -f "$file" ] && source "$file"
+done
+unset file
+# <<< PATH Configuration <<<
+
+# Load Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# >>> Key Bindings >>>
+bindkey '^p' history-search-backward
+bindkey '^n' history-search-forward
+# <<< Key Bindings <<<
+
+# >>> Conda Initialization >>> #this may vary
 __conda_setup="$('/Users/wjchang/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
@@ -92,9 +128,7 @@ fi
 unset __conda_setup
 # <<< Conda Initialization <<<
 
-# >>> Optional Enhancements >>>
-# Uncomment if you want to use syntax highlighting and autosuggestions
-# source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-# <<< Optional Enhancements <<<
+# >>> Powerlevel10k Configuration >>>
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# <<< Powerlevel10k Configuration <<<
 
