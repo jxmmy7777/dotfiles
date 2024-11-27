@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-cd "$(dirname "${BASH_SOURCE}")";
+cd "$(dirname "${(%):-%x}")";
 
 git pull origin main;
 
@@ -11,14 +11,23 @@ function doIt() {
 		--exclude "bootstrap.sh" \
 		--exclude "README.md" \
 		--exclude "LICENSE-MIT.txt" \
+		--exclude ".zshrc" \
 		-avh --no-perms . ~;
-	source ~/.bash_profile;
+	
+	if [ -f ~/.zshrc ]; then
+		mv ~/.zshrc ~/.zshrc.backup
+	fi
+	
+	cp .zshrc ~/.zshrc
+	sed -i '' 's/setopt GLOBSTAR/#setopt GLOBSTAR/g' ~/.zshrc
+	
+	source ~/.zshrc;
 }
 
-if [ "$1" == "--force" -o "$1" == "-f" ]; then
+if [[ "$1" == "--force" || "$1" == "-f" ]]; then
 	doIt;
 else
-	read -p "This may overwrite existing files in your home directory. Are you sure? (y/n) " -n 1;
+	read "REPLY?This may overwrite existing files in your home directory. Are you sure? (y/n) ";
 	echo "";
 	if [[ $REPLY =~ ^[Yy]$ ]]; then
 		doIt;
