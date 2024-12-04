@@ -63,9 +63,7 @@
           'lua5.3',
           'lynx',
           'p7zip-full'
-]
-}
-}"
+        ] }}"
         state: present
       become: true
       when: ansible_os_family == 'Debian'
@@ -84,9 +82,7 @@
           'lua',
           'lynx',
           'p7zip'
-]
-}
-}"
+        ] }}"
         state: present
       become: false
       when: ansible_os_family == 'Darwin'
