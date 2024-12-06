@@ -24,11 +24,6 @@ git clone -qq https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CU
 echo "Installing autoupdate..."
 git clone -qq https://github.com/TamCore/autoupdate-oh-my-zsh-plugins ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
 
-# Set zsh as default shell if it isn't already
-if [ "$SHELL" != "$(which zsh)" ]; then
-    chsh -s $(which zsh)
-fi
-
 echo "Complete!"
 
 rm ~/.zshrc

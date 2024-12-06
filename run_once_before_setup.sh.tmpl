@@ -1,32 +1,57 @@
 #!/bin/bash
 
-echo "Installing oh my zsh..."
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+# Function to handle installations
+install_component() {
+    local name=$1
+    local command=$2
+    
+    echo "Installing ${name}..."
+    if eval "$command"; then
+        echo "✓ ${name} installed successfully"
+    else
+        echo "✗ Failed to install ${name}"
+        return 1
+    fi
+}
 
-echo "Installing powerlevel10k..."
-git clone -qq --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-
-echo "Installing zsh-completions..."
-git clone -qq https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions
-
-echo "Installing conda-zsh-completions..."
-git clone -qq https://github.com/esc/conda-zsh-completion ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/conda-zsh-completion
-
-echo "Installing zsh-autosuggestions..."
-git clone -qq https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-
-echo "Installing zsh-syntax-highlighting..."
-git clone -qq https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-echo "Installing zsh-history-substring-search..."
-git clone -qq https://github.com/zsh-users/zsh-history-substring-search ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-history-substring-search
-
-echo "Installing autoupdate..."
-git clone -qq https://github.com/TamCore/autoupdate-oh-my-zsh-plugins ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/autoupdate
-
-# Set zsh as default shell if it isn't already
-if [ "$SHELL" != "$(which zsh)" ]; then
-    chsh -s $(which zsh)
+# Install Oh My Zsh
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    install_component "Oh My Zsh" 'sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended'
+else
+    echo "✓ Oh My Zsh already installed"
 fi
 
-echo "Complete!"
+# Define ZSH_CUSTOM path
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Array of plugins to install
+declare -A plugins=(
+    ["powerlevel10k"]="https://github.com/romkatv/powerlevel10k.git:themes/powerlevel10k"
+    ["zsh-completions"]="https://github.com/zsh-users/zsh-completions.git:plugins/zsh-completions"
+    ["conda-zsh-completion"]="https://github.com/esc/conda-zsh-completion.git:plugins/conda-zsh-completion"
+    ["zsh-autosuggestions"]="https://github.com/zsh-users/zsh-autosuggestions.git:plugins/zsh-autosuggestions"
+    ["zsh-syntax-highlighting"]="https://github.com/zsh-users/zsh-syntax-highlighting.git:plugins/zsh-syntax-highlighting"
+    ["zsh-history-substring-search"]="https://github.com/zsh-users/zsh-history-substring-search.git:plugins/zsh-history-substring-search"
+    ["autoupdate"]="https://github.com/TamCore/autoupdate-oh-my-zsh-plugins.git:plugins/autoupdate"
+)
+
+# Install each plugin
+for plugin in "${!plugins[@]}"; do
+    IFS=':' read -r repo path <<< "${plugins[$plugin]}"
+    target_dir="$ZSH_CUSTOM/$path"
+    
+    if [ ! -d "$target_dir" ]; then
+        install_component "$plugin" "git clone -qq --depth=1 $repo $target_dir"
+    else
+        echo "✓ $plugin already installed"
+    fi
+done
+
+echo "Setup complete!"
+
+# Uncomment these lines if you want to force .zshrc update
+# if [ -f ~/.zshrc ]; then
+#     echo "Backing up existing .zshrc to .zshrc.backup"
+#     mv ~/.zshrc ~/.zshrc.backup
+# fi
+# ~/bin/chezmoi apply
