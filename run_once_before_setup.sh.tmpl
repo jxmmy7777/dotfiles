@@ -6,6 +6,16 @@ if [ -z "$BASH_VERSION" ]; then
     exit 1
 fi
 
+# Check if zsh is installed, if not try to install it
+if ! command -v zsh >/dev/null 2>&1; then
+    echo "Zsh is not installed. Installing zsh..."
+    if ! curl -fsSL https://raw.githubusercontent.com/romkatv/zsh-bin/master/install | sh; then
+        echo "Could not install zsh. Please install zsh manually."
+        exit 1
+    fi
+    echo "✓ Zsh installed successfully"
+fi
+
 # Function to handle installations
 install_component() {
     local name=$1
@@ -21,19 +31,6 @@ install_component() {
         return 1
     fi
 }
-
-# Install Oh My Zsh
-if [ ! -d "$HOME/.oh-my-zsh" ]; then
-    sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
-    if [ $? -eq 0 ]; then
-        echo "✓ Oh My Zsh installed successfully"
-    else
-        echo "✗ Failed to install Oh My Zsh"
-        exit 1
-    fi
-else
-    echo "✓ Oh My Zsh already installed"
-fi
 
 # Define ZSH_CUSTOM path
 ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
