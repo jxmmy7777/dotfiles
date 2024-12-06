@@ -30,3 +30,6 @@ if [ "$SHELL" != "$(which zsh)" ]; then
 fi
 
 echo "Complete!"
+
+rm ~/.zshrc
+~/bin/chezmoi apply
