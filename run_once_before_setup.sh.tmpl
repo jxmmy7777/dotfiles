@@ -16,6 +16,21 @@ if ! command -v zsh >/dev/null 2>&1; then
     echo "✓ Zsh installed successfully"
 fi
 
+# Check if Oh My Zsh is installed, if not install it
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    if ! sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended; then
+        echo "✗ Failed to install Oh My Zsh"
+        exit 1
+    fi
+    echo "✓ Oh My Zsh installed successfully"
+else
+    echo "✓ Oh My Zsh already installed"
+fi
+
+# Define ZSH_CUSTOM path
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
 # Function to handle installations
 install_component() {
     local name=$1
@@ -31,9 +46,6 @@ install_component() {
         return 1
     fi
 }
-
-# Define ZSH_CUSTOM path
-ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
 
 # Install plugins one by one
 if [ ! -d "$ZSH_CUSTOM/themes/powerlevel10k" ]; then
