@@ -1,0 +1,31 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)"
+    ],
+    "deny": [
+      "Bash(rm*)",
+      "Bash(git rm*)",
+      "Bash(cp *)",
+      "Bash(mv *)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(truncate*)",
+      "Bash(kubectl delete*)"
+    ]
+  },
+  "model": "opus",
+  "statusLine": {
+    "type": "command",
+    "command": "~/.claude/statusline.sh"
+  },
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "theme": "dark-daltonized",
+  "voiceEnabled": true
+}

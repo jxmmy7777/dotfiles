@@ -90,6 +90,15 @@ else
     echo "✓ autoupdate already installed"
 fi
 
+# Install oh-my-tmux
+if [ ! -d "$HOME/.tmux" ]; then
+    install_component "oh-my-tmux" "https://github.com/gpakosz/.tmux.git" "$HOME/.tmux"
+    ln -sf "$HOME/.tmux/.tmux.conf" "$HOME/.tmux.conf"
+    echo "✓ oh-my-tmux symlink created"
+else
+    echo "✓ oh-my-tmux already installed"
+fi
+
 echo "Setup complete!"
 
 # Uncomment these lines if you want to force .zshrc update

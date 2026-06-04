@@ -1,0 +1,25 @@
+{
+  "Profiles": [
+    {
+      "Name": "Chezmoi",
+      "Guid": "chezmoi-default-v1",
+      "Normal Font": "MesloLGSNF-Regular 13",
+      "Use Non-ASCII Font": false,
+      "ASCII Anti Aliased": true,
+      "Background Color": {
+        "Red Component": 0.1020,
+        "Green Component": 0.1059,
+        "Blue Component": 0.1490,
+        "Alpha Component": 1,
+        "Color Space": "sRGB"
+      },
+      "Foreground Color": {
+        "Red Component": 0.7529,
+        "Green Component": 0.7843,
+        "Blue Component": 0.9647,
+        "Alpha Component": 1,
+        "Color Space": "sRGB"
+      }
+    }
+  ]
+}

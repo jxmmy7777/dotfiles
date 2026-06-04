@@ -1,0 +1,57 @@
+# oh-my-tmux local overrides
+
+# ---------------------------------------------------------------------------
+# Color palette (Tokyo Night: dark navy bg, blue + purple accents)
+# ---------------------------------------------------------------------------
+tmux_conf_theme_colour_1="#1a1b26"   # background
+tmux_conf_theme_colour_2="#24283b"   # panel bg
+tmux_conf_theme_colour_3="#a9b1d6"   # muted text
+tmux_conf_theme_colour_4="#7aa2f7"   # blue  (active window / pane border)
+tmux_conf_theme_colour_5="#bb9af7"   # purple (mode / message highlight)
+tmux_conf_theme_colour_6="#1a1b26"   # dark bg
+tmux_conf_theme_colour_7="#c0caf5"   # bright lavender text
+tmux_conf_theme_colour_8="#1a1b26"   # dark bg
+
+# ---------------------------------------------------------------------------
+# Powerline separators
+# ---------------------------------------------------------------------------
+tmux_conf_theme_left_separator_main=''
+tmux_conf_theme_left_separator_sub=''
+tmux_conf_theme_right_separator_main=''
+tmux_conf_theme_right_separator_sub=''
+
+# ---------------------------------------------------------------------------
+# Status bar segments
+# left:  [purple] session  [blue] uptime  [navy] ...
+# right: [navy] ...  [slate] time  [blue] host
+# ---------------------------------------------------------------------------
+tmux_conf_theme_status_left=" ❐ #S "
+tmux_conf_theme_status_right=" %R | %d %b | #h "
+
+tmux_conf_theme_status_left_fg="#1a1b26,#1a1b26,#c0caf5"
+tmux_conf_theme_status_left_bg="#bb9af7,#7aa2f7,#24283b"
+tmux_conf_theme_status_left_attr="bold,bold,none"
+
+tmux_conf_theme_status_right_fg="#a9b1d6,#c0caf5,#1a1b26"
+tmux_conf_theme_status_right_bg="#24283b,#414868,#7aa2f7"
+tmux_conf_theme_status_right_attr="none,none,bold"
+
+# ---------------------------------------------------------------------------
+# Keybindings
+# ---------------------------------------------------------------------------
+
+# Use Ctrl+A as prefix
+set -g prefix C-a
+unbind C-b
+bind C-a send-prefix
+
+# Vim keys in copy mode
+setw -g mode-keys vi
+
+# Navigate sessions with n/p
+bind n switch-client -n
+bind p switch-client -p
+
+# Reload config
+unbind r
+bind r source-file ~/.tmux.conf \; display "Config reloaded"

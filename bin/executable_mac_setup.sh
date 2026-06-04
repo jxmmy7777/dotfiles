@@ -14,3 +14,5 @@ brew install ncdu
 brew install git
 brew install htop
 brew install vim
+brew install tmux
+brew install --cask font-meslo-lg-nerd-font

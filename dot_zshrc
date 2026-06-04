@@ -36,9 +36,9 @@ setopt HIST_FIND_NO_DUPS
 # <<< History Configuration <<<
 
 # >>> Directory and Shell Options >>>
-setopt AUTO_CD          
-setopt CORRECT         
-setopt CORRECT_ALL     
+setopt AUTO_CD
+unsetopt CORRECT
+unsetopt CORRECT_ALL
 setopt NO_CASE_GLOB     
 #setopt GLOBSTAR         
 setopt AUTO_PUSHD       
@@ -83,4 +83,9 @@ bindkey '^n' history-search-forward
 # >>> Powerlevel10k Configuration >>>
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 # <<< Powerlevel10k Configuration <<<
+
+# >>> PATH Configuration >>>
+export PATH="$HOME/.claude/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
+# <<< PATH Configuration <<<
 
